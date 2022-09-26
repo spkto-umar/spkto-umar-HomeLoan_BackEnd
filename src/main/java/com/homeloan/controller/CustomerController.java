@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.homeloan.entity.Customer;
 import com.homeloan.entity.IncomeDetails;
+import com.homeloan.entity.LoanApplication;
 import com.homeloan.exception.AmountCannotBeNegativeException;
 import com.homeloan.exception.NoCustomerFoundException;
 import com.homeloan.exception.NoIncomeDetailsFoundException;
+import com.homeloan.exception.NoLoanApplicationFoundException;
 import com.homeloan.service.CustomerService;
 
 @RestController
@@ -67,9 +69,9 @@ public class CustomerController
 	}
 	
 	@GetMapping("/incomedetails/{userId}")
-	public IncomeDetails getIncomeById(@PathVariable int userId) throws NoIncomeDetailsFoundException, NoCustomerFoundException
+	public IncomeDetails getIncomeByUser(@PathVariable int userId) throws NoIncomeDetailsFoundException, NoCustomerFoundException
 	{
-		return cServ.findIncomeById(userId);
+		return cServ.findIncomeByUser(userId);
 	}
 	
 	@PutMapping("/incomedetails/{incomeId}")
@@ -82,5 +84,29 @@ public class CustomerController
 	public IncomeDetails removeIncome(@PathVariable int incomeId) throws NoIncomeDetailsFoundException, NoCustomerFoundException
 	{
 		return cServ.deleteDetails(incomeId);
+	}
+	
+	@PostMapping("/loan/{userId}")
+	public LoanApplication addLoanDetails(@RequestBody LoanApplication loan,@PathVariable int userId) throws AmountCannotBeNegativeException, NoCustomerFoundException, NoLoanApplicationFoundException
+	{
+		return cServ.addLoan(loan, userId);
+	}
+	
+	@GetMapping("loan/{userId}")
+	public LoanApplication getLoanByUser(@PathVariable int userId) throws NoCustomerFoundException, NoLoanApplicationFoundException
+	{
+		return cServ.findLoanByUser(userId);
+	}
+	
+	@PutMapping("/loan/{applicationId}")
+	public LoanApplication modifyLoanDetails(@RequestBody LoanApplication loan,@PathVariable int applicationId) throws AmountCannotBeNegativeException, NoCustomerFoundException, NoLoanApplicationFoundException
+	{
+		return cServ.updateLoan(applicationId, loan);
+	}
+	
+	@DeleteMapping("loan/{applicationId}")
+	public LoanApplication removeLoanByUser(@PathVariable int applicationId) throws NoCustomerFoundException, NoLoanApplicationFoundException
+	{
+		return cServ.deleteLoan(applicationId);
 	}
 }

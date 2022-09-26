@@ -12,11 +12,14 @@ import org.springframework.stereotype.Service;
 
 import com.homeloan.dao.CustomerRepository;
 import com.homeloan.dao.IncomeDetailsRepository;
+import com.homeloan.dao.LoanApplicationRepository;
 import com.homeloan.entity.Customer;
 import com.homeloan.entity.IncomeDetails;
+import com.homeloan.entity.LoanApplication;
 import com.homeloan.exception.AmountCannotBeNegativeException;
 import com.homeloan.exception.NoCustomerFoundException;
 import com.homeloan.exception.NoIncomeDetailsFoundException;
+import com.homeloan.exception.NoLoanApplicationFoundException;
 
 @Service
 public class CustomerServiceImpl implements CustomerService
@@ -27,6 +30,9 @@ public class CustomerServiceImpl implements CustomerService
 	
 	@Autowired
 	private IncomeDetailsRepository iRepo;
+	
+	@Autowired
+	private LoanApplicationRepository lRepo;
 	
 	@PersistenceContext
 	EntityManager em;
@@ -105,7 +111,7 @@ public class CustomerServiceImpl implements CustomerService
 		income.setCustomer(c);
 		c.setIncome(income);
 		cRepo.save(c);
-		return findIncomeById(userId);
+		return findIncomeByUser(userId);
 		//return iRepo.save(income);
 	}
 
@@ -120,11 +126,11 @@ public class CustomerServiceImpl implements CustomerService
 				throw new AmountCannotBeNegativeException("Amount cannot be negative");
 			IncomeDetails ii=inc.get();
 			Customer c=findCustomerById(ii.getCustomer().getUserId());
-			System.out.println(c);
+			//System.out.println(c);
 			income.setCustomer(c);
 			c.setIncome(income);
 			cRepo.save(c);
-			return findIncomeById(c.getUserId());
+			return findIncomeByUser(c.getUserId());
 		}
 		throw new NoIncomeDetailsFoundException("Income Details with id "+incomeId+" does not exist");
 	}
@@ -137,7 +143,7 @@ public class CustomerServiceImpl implements CustomerService
 		{
 			IncomeDetails ii=inc.get();
 			Customer c=findCustomerById(ii.getCustomer().getUserId());
-			System.out.println(c);
+			//System.out.println(c);
 			c.setIncome(null);
 			//ii.setCustomer(null);
 			cRepo.save(c);
@@ -148,7 +154,7 @@ public class CustomerServiceImpl implements CustomerService
 	}
 
 	@Override
-	public IncomeDetails findIncomeById(int userId) throws NoIncomeDetailsFoundException, NoCustomerFoundException {
+	public IncomeDetails findIncomeByUser(int userId) throws NoIncomeDetailsFoundException, NoCustomerFoundException {
 		Customer c=findCustomerById(userId);
 		Optional<IncomeDetails> inc=iRepo.findById(c.getIncome().getIncomeId());
 		if(inc.isPresent())
@@ -159,5 +165,63 @@ public class CustomerServiceImpl implements CustomerService
 		throw new NoIncomeDetailsFoundException("Income Details for userId "+userId+" does not exist");
 	}
 
-	
+	@Override
+	public LoanApplication addLoan(LoanApplication loan, int userId)throws AmountCannotBeNegativeException, NoCustomerFoundException, NoLoanApplicationFoundException
+	{
+		if(loan.getLoanAmount()<0)
+			throw new AmountCannotBeNegativeException("Loan Amount cannot be negative");
+		Customer c=findCustomerById(userId);
+		loan.setCustomer(c);
+		c.setLoan(loan);
+		cRepo.save(c);
+		return findLoanByUser(userId);		
+	}
+
+	@Override
+	public LoanApplication findLoanByUser(int userId) throws NoCustomerFoundException,NoLoanApplicationFoundException {
+		Customer c=findCustomerById(userId);
+		Optional<LoanApplication> loan=lRepo.findById(c.getLoan().getApplicationId());
+		if(loan.isPresent())
+		{
+			LoanApplication lo=loan.get();
+			return lo;
+		}
+		throw new NoLoanApplicationFoundException("Loan application for user "+userId+" does not exist");
+	}
+
+	@Override
+	public LoanApplication updateLoan(int applicationId,LoanApplication loan) throws NoCustomerFoundException, NoLoanApplicationFoundException, AmountCannotBeNegativeException {
+		Optional<LoanApplication> lo=lRepo.findById(applicationId);
+		if(lo.isPresent())
+		{
+			if(loan.getLoanAmount()<0)
+				throw new AmountCannotBeNegativeException("Amount cannot be negative");
+			LoanApplication ll=lo.get();
+			Customer c=findCustomerById(ll.getCustomer().getUserId());
+			//System.out.println(c);
+			loan.setCustomer(c);
+			c.setLoan(loan);
+			cRepo.save(c);
+			return findLoanByUser(c.getUserId());
+		}		
+		throw new NoLoanApplicationFoundException("Loan application with loan id "+applicationId+" does not exist");
+	}
+
+	@Override
+	public LoanApplication deleteLoan(int applicationId) throws NoCustomerFoundException,NoLoanApplicationFoundException 
+	{
+		Optional<LoanApplication> loan=lRepo.findById(applicationId);
+		if(loan.isPresent())
+		{
+			LoanApplication lo=loan.get();
+			Customer c=findCustomerById(lo.getCustomer().getUserId());
+			//System.out.println(c);
+			c.setLoan(null);
+			//ii.setCustomer(null);
+			cRepo.save(c);
+			lRepo.delete(lo);
+			return lo;
+		}
+		throw new NoLoanApplicationFoundException("Loan application with loan id "+applicationId+" does not exist");
+	}
 }

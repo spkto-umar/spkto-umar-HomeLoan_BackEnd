@@ -10,6 +10,7 @@ public class LoanApplication
 		@SequenceGenerator(name = "appid_seq", initialValue = 6001, allocationSize = 1)
 		@GeneratedValue(generator = "appid_seq", strategy = GenerationType.SEQUENCE)
 		private int applicationId;
+		
 		private double loanAmount;
 		private int tenure;
 		private int interest;
