@@ -8,6 +8,8 @@ public class Admin
 {
 
 	@Id
+	@SequenceGenerator(name = "adm_seq", initialValue = 50001, allocationSize = 1)
+	@GeneratedValue(generator = "adm_seq", strategy = GenerationType.SEQUENCE)
 	private int adminId;
 	
 	@Column(unique=true)

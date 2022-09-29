@@ -22,6 +22,8 @@ public interface CustomerService
 	public IncomeDetails findIncomeByUser(int userId)throws NoIncomeDetailsFoundException,NoCustomerFoundException;
 	public IncomeDetails updateDetails(int incomeId,IncomeDetails income)throws AmountCannotBeNegativeException,NoIncomeDetailsFoundException,NoCustomerFoundException;
 	public IncomeDetails deleteDetails(int incomeId)throws NoIncomeDetailsFoundException,NoCustomerFoundException;
+	public List<IncomeDetails> listOfIncome();
+	public List<LoanApplication> listOfLoan();
 	public LoanApplication addLoan(LoanApplication loan,int userId)throws AmountCannotBeNegativeException,NoCustomerFoundException,NoLoanApplicationFoundException;
 	public LoanApplication findLoanByUser(int userId)throws NoCustomerFoundException,NoLoanApplicationFoundException;
 	public LoanApplication updateLoan(int applicationId,LoanApplication loan)throws NoCustomerFoundException, NoLoanApplicationFoundException,AmountCannotBeNegativeException;

@@ -83,6 +83,9 @@ public class CustomerServiceImpl implements CustomerService
 		Optional<Customer> ct=cRepo.findById(userId);
 		if(ct.isPresent())
 		{
+			Customer cc=ct.get();
+			c.setIncome(cc.getIncome());
+			c.setLoan(cc.getLoan());
 			Customer cust=cRepo.save(c);
 			return cust;
 		}
@@ -223,5 +226,15 @@ public class CustomerServiceImpl implements CustomerService
 			return lo;
 		}
 		throw new NoLoanApplicationFoundException("Loan application with loan id "+applicationId+" does not exist");
+	}
+
+	@Override
+	public List<IncomeDetails> listOfIncome() {
+		return iRepo.findAll();
+	}
+
+	@Override
+	public List<LoanApplication> listOfLoan() {
+		return lRepo.findAll();
 	}
 }

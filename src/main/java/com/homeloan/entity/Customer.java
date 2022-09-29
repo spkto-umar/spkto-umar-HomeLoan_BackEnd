@@ -16,10 +16,10 @@ public class Customer
 	@Column(unique=true)
 	private String email;
 	private String password;
-	private String firstname;
-	private String middlename;
-	private String lastname;
-	private Long phoneNo;
+	private String firstName;
+	private String middleName;
+	private String lastName;
+	private Long phone;
 	private String dob;
 	private String gender;
 	private String nationality;
@@ -46,18 +46,17 @@ public class Customer
 		super();
 	}
 	
-	
-	public Customer(int userId, String email, String password, String firstname, String middlename, String lastname,
-			Long phoneNo, String dob, String gender, String nationality, Long aadharNo, String panNo,
+	public Customer(int userId, String email, String password, String firstName, String middleName, String lastName,
+			Long phone, String dob, String gender, String nationality, Long aadharNo, String panNo,
 			IncomeDetails income, LoanApplication loan) {
 		super();
 		this.userId = userId;
 		this.email = email;
 		this.password = password;
-		this.firstname = firstname;
-		this.middlename = middlename;
-		this.lastname = lastname;
-		this.phoneNo = phoneNo;
+		this.firstName = firstName;
+		this.middleName = middleName;
+		this.lastName = lastName;
+		this.phone = phone;
 		this.dob = dob;
 		this.gender = gender;
 		this.nationality = nationality;
@@ -67,26 +66,21 @@ public class Customer
 		this.loan = loan;
 	}
 
-	
 	public IncomeDetails getIncome() {
 		return income;
 	}
-
 
 	public void setIncome(IncomeDetails income) {
 		this.income = income;
 	}
 
-
 	public LoanApplication getLoan() {
 		return loan;
 	}
 
-
 	public void setLoan(LoanApplication loan) {
 		this.loan = loan;
 	}
-
 
 	public int getUserId() {
 		return userId;
@@ -106,31 +100,40 @@ public class Customer
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getFirstname() {
-		return firstname;
-	}
-	public void setFirstname(String firstname) {
-		this.firstname = firstname;
-	}
-	public String getMiddlename() {
-		return middlename;
-	}
-	public void setMiddlename(String middlename) {
-		this.middlename = middlename;
-	}
-	public String getLastname() {
-		return lastname;
-	}
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
-	}
 	
-	public Long getPhoneNo() {
-		return phoneNo;
+	public String getFirstName() {
+		return firstName;
 	}
-	public void setPhoneNo(Long phoneNo) {
-		this.phoneNo = phoneNo;
+
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
+
+	public String getMiddleName() {
+		return middleName;
+	}
+
+	public void setMiddleName(String middleName) {
+		this.middleName = middleName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public Long getPhone() {
+		return phone;
+	}
+
+	public void setPhone(Long phone) {
+		this.phone = phone;
+	}
+
 	public String getDob() {
 		return dob;
 	}
@@ -162,12 +165,12 @@ public class Customer
 		this.panNo = panNo;
 	}
 
-
 	@Override
 	public String toString() {
-		return "Customer [userId=" + userId + ", email=" + email + ", password=" + password + ", firstname=" + firstname
-				+ ", middlename=" + middlename + ", lastname=" + lastname + ", phoneNo=" + phoneNo + ", dob=" + dob
+		return "Customer [userId=" + userId + ", email=" + email + ", password=" + password + ", firstName=" + firstName
+				+ ", middleName=" + middleName + ", lastName=" + lastName + ", phone=" + phone + ", dob=" + dob
 				+ ", gender=" + gender + ", nationality=" + nationality + ", aadharNo=" + aadharNo + ", panNo=" + panNo
 				+ ", income=" + income + ", loan=" + loan + "]";
 	}
+
 }
